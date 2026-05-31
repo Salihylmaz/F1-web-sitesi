@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # 1. Veritabanı Servisimiz
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: f1_elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - f1_network
+
+  # 2. C# Backend API Servisimiz
+  api:
+    build:
+      context: ./f1-backend # Dockerfile'ın bulunduğu klasör
+      dockerfile: Dockerfile
+    container_name: f1_api
+    ports:
+      - "8080:8080" # .NET 8'in dışarı açılan varsayılan portu
+    environment:
+      # Program.cs'in okuyacağı Docker içi veritabanı adresi
+      - ELASTICSEARCH_URL=http://f1_elasticsearch:9200 
+    depends_on:
+      - elasticsearch # Önce veritabanının ayağa kalkmasını bekle
+    networks:
+      - f1_network
+
+# Verilerin kalıcı olması için oluşturduğumuz alan
+volumes:
+  es_data:
+    driver: local
+
+# İki container'ın birbiriyle konuşabilmesi için kurduğumuz özel ağ
+networks:
+  f1_network:
+    driver: bridge
