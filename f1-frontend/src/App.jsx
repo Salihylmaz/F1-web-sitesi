@@ -9,6 +9,7 @@ function App() {
   const [newName, setNewName] = useState('')
   const [newTeam, setNewTeam] = useState('')
   const [newPoints, setNewPoints] = useState('')
+  const [editingDriver, setEditingDriver] = useState(null)
 
   useEffect(() => {
     fetchDrivers()
@@ -24,27 +25,73 @@ function App() {
     .catch(error => console.error('Veri çekme hatası: ', error))
   }
 
-  const handleAddDriver = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
 
-    const newDriver = {
-      id: Math.floor(Math.random() * 10000),
-      name: newName,
-      team: newTeam,
-      points: parseInt(newPoints)
+    if(editingDriver != null){
+
+      const updatedDriver = {
+        id: editingDriver.id,
+        name: newName,
+        team: newTeam,
+        points: parseInt(newPoints)
+      }
+
+      axios.put(`https://localhost:7231/api/Drivers/${editingDriver.id}`, updatedDriver)
+      .then(response =>{
+        fetchDrivers()
+
+        setNewName('')
+        setNewPoints('')
+        setNewTeam('')
+        setEditingDriver(null)
+      })
     }
+    else{
+      const newDriver = {
+        id: Math.floor(Math.random() * 10000),
+        name: newName,
+        team: newTeam,
+        points: parseInt(newPoints)
+      }
 
-    axios.post('https://localhost:7231/api/Drivers', newDriver)
-    .then(response => {
-      console.log('Sunucu cevabı: ', response.data)
-      //fetchDrivers()
-      setDrivers([...drivers, newDriver])
-      setNewName('')
-      setNewTeam('')
-      setNewPoints('')
+      axios.post('https://localhost:7231/api/Drivers', newDriver)
+      .then(response => {
+        console.log('Sunucu cevabı: ', response.data)
+        //fetchDrivers()
+        setDrivers([...drivers, newDriver])
+        setNewName('')
+        setNewTeam('')
+        setNewPoints('')
 
-    })
-    .catch(error => console.error("Sürücü eklenirken hata:",error))
+      })
+      .catch(error => console.error("Sürücü eklenirken hata:",error))
+    }
+  }
+  const handleEditClick = (driver) => {
+    setEditingDriver(driver)
+    setNewName(driver.name)
+    setNewPoints(driver.points)
+    setNewTeam(driver.team)
+  }
+
+  // --- 5. VERİ SİLME (DELETE) ALANI ---
+  const handleDeleteDriver = (id) => {
+    // Silmeden önce kullanıcıya emin olup olmadığını soralım (Defensive UI)
+    const isConfirmed = window.confirm("Bu pilotu garajdan silmek istediğine emin misin?");
+    
+    if (isConfirmed) {
+      // C# backend'ine DELETE isteği atıyoruz
+      axios.delete(`https://localhost:7231/api/Drivers/${id}`)
+        .then(response => {
+          console.log("Silme başarılı:", response.data);
+          
+          // NRT Mantığı: API'dan listeyi baştan çekmek yerine, 
+          // silinen pilotun ID'sini mevcut state'ten filtreleyip çıkarıyoruz.
+          setDrivers(drivers.filter(driver => driver.id !== id));
+        })
+        .catch(error => console.error("Sürücü silinirken hata:", error));
+    }
   }
 
 return (
@@ -54,7 +101,7 @@ return (
       {/* YENİ PİLOT EKLEME FORMU */}
       <div className="form-container">
         <h2>Yeni Pilot Ekle</h2>
-        <form onSubmit={handleAddDriver}>
+        <form onSubmit={handleSubmit}>
           <input 
             type="text" 
             placeholder="Pilot Adı (Örn: Fernando Alonso)" 
@@ -89,7 +136,17 @@ return (
             <h3>{driver.name}</h3>
             <p><strong>Takım:</strong> {driver.team}</p>
             <p><strong>Puan:</strong> {driver.points}</p>
+            <button className='delete-btn' onClick={() => handleDeleteDriver(driver.id)}>
+            Pit'ten çıkar
+          </button>
+
+          <button className='put-btn' onClick={() => handleEditClick(driver)}>
+            Sürücü bilgilerini güncelle
+          </button>
+
           </div>
+          
+
         ))}
       </div>
     </div>
