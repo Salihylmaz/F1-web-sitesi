@@ -144,7 +144,61 @@ button {
   display: flex;
   justify-content: center;
 }
+/* ANA ŞASİ (LAYOUT) */
+.app-layout {
+  display: flex;
+  height: 100vh; /* Ekranın tamamını kapla */
+  width: 100vw;
+  background-color: #1a1b20;
+}
 
+/* SOL MENÜ (SIDEBAR) */
+.sidebar {
+  width: 250px;
+  background-color: #111215; /* Asfalttan daha koyu bir ton */
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid #ef233c; /* F1 kırmızısı ayırıcı çizgi */
+}
+
+.sidebar-logo {
+  color: #ffffff;
+  font-size: 24px;
+  letter-spacing: 3px;
+  margin-bottom: 40px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* MENÜ LİNKLERİ */
+.nav-link {
+  color: #a0a5b5;
+  text-decoration: none; /* Alt çizgiyi kaldır */
+  font-size: 16px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #2b2d42;
+  color: #ffffff;
+  transform: translateX(5px); /* Üzerine gelince çok hafif sağa kaysın */
+}
+
+/* SAĞ TARAF (DİNAMİK İÇERİK ALANI) */
+.main-content {
+  flex: 1; /* Geri kalan tüm ekranı doldur */
+  overflow-y: auto; /* Sadece sağ taraf kendi içinde aşağı kaysın */
+  padding-bottom: 50px;
+}
 
 .search-container input {
   width: 100%;
