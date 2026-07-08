@@ -7,14 +7,15 @@ function DriverCard({driver, onDelete, onEdit}) {
             <h3>{driver.name}</h3>
             <p><strong>Takım:</strong> {driver.team}</p>
             <p><strong>Puan:</strong> {driver.points}</p>
-            <button className='delete-btn' onClick={() => handleDeleteDriver(driver.id)}>
+            <button className='delete-btn' onClick={() => onDelete(driver.id)}>
             Pit'ten çıkar
           </button>
 
-          <button className='put-btn' onClick={() => handleEditClick(driver)}>
+          <button className='put-btn' onClick={() => onEdit(driver)}>
             Sürücü bilgilerini güncelle
           </button>
 
           </div>
     )
 }
+export default DriverCard
