@@ -4,6 +4,7 @@ import axios from 'axios'
 import DriverCard from './DriverCard'
 import DriverForm from './DriverForm'
 import DriverList from './DriverList'
+import SearchBar from './SearchBar'
 
 function App() {
 
@@ -13,6 +14,20 @@ function App() {
   const [newTeam, setNewTeam] = useState('')
   const [newPoints, setNewPoints] = useState('')
   const [editingDriver, setEditingDriver] = useState(null)
+
+  const [searchQuery, setSearchQuery] = useState('')
+
+
+  const filteredDrivers = drivers.filter(driver => {
+    if(searchQuery == "") return true;
+
+    const query = searchQuery.toLowerCase();
+    const driverName = driver.name.toLowerCase();
+    const driverTeam = driver.team.toLowerCase();
+
+    return driverName.includes(query) || driverTeam.includes(query);
+  });
+
 
   useEffect(() => {
     fetchDrivers()
@@ -100,9 +115,15 @@ return (
 
       <hr />
 
+      <SearchBar 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+
+      />
+
       {/* PİLOT LİSTESİ */}
       <DriverList
-        drivers={drivers}
+        drivers={filteredDrivers}
         onDelete={handleDeleteDriver}
         onEdit={handleEditClick}
       />

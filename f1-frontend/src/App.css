@@ -6,7 +6,7 @@ html, body {
   min-height: 100vh;
 }
 
-* {
+*{
   box-sizing: border-box; 
 }
 
@@ -135,4 +135,38 @@ button {
 }
 .put-btn:hover {
   background-color: #023e8a;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 600px; /* Formdan bir tık daha geniş olsun ki dashboard havası versin */
+  margin: 20px 0 30px 0; /* Üstteki çizgiyle ve alttaki listeyle mesafesi */
+  display: flex;
+  justify-content: center;
+}
+
+
+.search-container input {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #2b2d42;
+  border: 2px solid #3a3b45;
+  border-radius: 30px; 
+  outline: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.search-container input:focus {
+  border-color: #0077b6; 
+  background-color: #25262e; 
+  box-shadow: 0 0 15px rgba(0, 119, 182, 0.4); 
+}
+
+/* PLACEHOLDER YAZISI */
+.search-container input::placeholder {
+  color: #a0a5b5;
+  font-style: italic;
 }
