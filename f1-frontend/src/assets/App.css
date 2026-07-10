@@ -299,8 +299,7 @@ button {
 
 .calendar-container {
   padding: 30px;
-  color: #ffffff;
-  max-width: 900px;
+  max-width: 1000px; /* Biletler çok uzamasın diye ekranı biraz daraltıyoruz */
   margin: 0 auto;
 }
 
@@ -326,51 +325,282 @@ button {
 }
 
 /* Yarış Kartı - Flexbox Mimarisi */
+.races-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Kartlar arası boşluk */
+}
+
+/* YENİ NESİL VİP BİLET TASARIMI (RACE CARD) */
 .race-card {
   background-color: #2b2d42;
-  padding: 20px 25px;
-  border-radius: 8px;
-  border-left: 5px solid #0077b6; /* Teknik bir mavi vurgu */
+  border-radius: 12px; /* Daha yumuşak köşeler */
   display: flex;
-  justify-content: space-between; /* Sağa ve sola yasla */
-  align-items: center; /* Dikeyde ortala */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden; /* Sol taraftaki kırmızı kutunun dışarı taşmasını engeller */
+  border: 1px solid #3a3b45; /* Asil, ince bir çerçeve */
+  position: relative;
 }
 
-/* Üzerine gelince oluşan hover efekti */
+/* Üzerine gelince oluşan neon parlama efekti */
 .race-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  border-color: #ef233c; /* F1 kırmızısı parlar */
 }
 
-/* Sol Taraf: Pist Bilgileri */
+/* Biletin Sol Tarafı: Kırmızı Raund Kutusu */
+.race-round {
+  background-color: #ef233c;
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: bold;
+  padding: 30px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+.race-info {
+  flex: 1; /* Ortadaki boşluğu doldurur */
+  padding: 0 30px;
+}
+
 .race-info h3 {
   margin: 0 0 8px 0;
   color: #ffffff;
-  font-size: 18px;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
 }
 
 .race-info p {
   margin: 0;
-  color: #a0a5b5;
-  font-size: 14px;
+  color: #8d99ae;
+  font-size: 0.95rem;
+  font-style: italic;
 }
 
-/* Sağ Taraf: Tarih ve Saat */
+/* Biletin Sağ Tarafı: Zaman Çizelgesi */
 .race-time {
+  padding: 20px 30px;
   text-align: right;
+  border-left: 2px dashed #4a4e69; /* Yırtılabilir Bilet (Tear-off) Efekti */
+  min-width: 200px;
 }
 
 .race-time .date {
+  color: #ffffff;
   font-weight: bold;
-  font-size: 16px;
-  color: #ef233c;
-  margin-bottom: 5px;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
 }
 
 .race-time .time {
+  color: #ef233c; /* Saati kırmızı yaparak vurguluyoruz */
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+/* --- SIRADAKİ YARIŞ (NEXT RACE) VURGUSU --- */
+
+/* Kartın etrafına kalın kırmızı çerçeve ve büyüme efekti */
+.race-card.next-race {
+  border: 2px solid #ef233c; 
+  background-color: #32354a; /* Arka planı hafif daha aydınlık yapıyoruz */
+  transform: scale(1.02); /* Kart diğerlerinden fiziksel olarak biraz daha büyük durur */
+  z-index: 5;
+  animation: pulseGlow 2s infinite ease-in-out; /* Kalp atışı animasyonu */
+}
+
+/* Kırmızı ışık parlayıp sönsün (Pulse Animasyonu) */
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 10px rgba(239, 35, 60, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(239, 35, 60, 0.7); }
+  100% { box-shadow: 0 0 10px rgba(239, 35, 60, 0.3); }
+}
+
+/* Hover olduğunda animasyon bozulmasın diye sabitliyoruz */
+.race-card.next-race:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 30px rgba(239, 35, 60, 0.9);
+}
+
+.next-race-badge {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background-color: #ef233c;
+  color: #ffffff;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+/* --- YENİ NESİL MİNİMALİST TAKVİM MODÜLÜ (GÜNCELLEMELER) --- */
+
+.calendar-container {
+  padding: 30px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.modern-races-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Kartlar biraz daha genişledi */
+  gap: 20px;
+}
+
+.modern-race-card {
+  background-color: #25262e;
+  border: 1px solid #3a3b45;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+/* Hover Efekti (Geçmiş yarışlarda hoverı iptal etmiyoruz ama çok abartmıyoruz) */
+.modern-race-card:not(.past-race):hover {
+  border-color: #5c5e6e;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* GEÇMİŞ YARIŞLARI SOLUKLAŞTIRMA (Sezon İlerlemesi) */
+.modern-race-card.past-race {
+  opacity: 0.5; /* Yarı saydam */
+  filter: grayscale(80%); /* Renkleri soluklaştır */
+  background-color: #1a1b20;
+}
+.modern-race-card.past-race:hover {
+  opacity: 0.8; /* Fareyle üstüne gelince biraz netleşir */
+  filter: grayscale(20%);
+}
+
+/* ROZETLER (BADGES) */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3a3b45;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.badges-wrapper {
+  display: flex;
+  gap: 8px; /* Rozetler arası boşluk */
+  align-items: center;
+}
+
+.round-badge {
+  background-color: #1a1b20;
   color: #a0a5b5;
-  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* 🔥 Sprint Rozeti */
+.sprint-badge {
+  background: linear-gradient(45deg, #FF4500, #FF8C00);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* 🏁 Tamamlandı Rozeti */
+.completed-badge {
+  background-color: #3a3b45;
+  color: #8d99ae;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.race-date {
+  color: #ef233c; 
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-align: right;
+}
+
+.card-body h3 {
+  margin: 0 0 8px 0;
+  color: #ffffff;
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+}
+
+.card-body p {
+  margin: 0;
+  color: #8d99ae;
+  font-size: 0.9rem;
+}
+
+/* --- SIRADAKİ YARIŞ VURGUSU & CANLI SAYAÇ --- */
+.modern-race-card.highlighted-race {
+  border-color: #ef233c;
+  background-color: #2c1e22; 
+  padding-top: 0; 
+  overflow: hidden; 
+}
+
+.status-banner {
+  background-color: #ef233c;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 0 -20px 15px -20px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Canlı Geri Sayım Fontu */
+.live-countdown {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  background-color: rgba(0,0,0,0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Kırmızı yanan yanıp sönen küçük nokta (Canlı Hissiyatı) */
+.pulsing-dot {
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.highlighted-race .round-badge {
+  background-color: #ef233c;
+  color: #ffffff;
 }
 
 /* --- HABERLER MODÜLÜ --- */
