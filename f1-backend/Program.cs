@@ -1,5 +1,7 @@
 using Elastic.Clients.Elasticsearch;
-using f1_backend.Models;
+using Hangfire;
+using Hangfire.InMemory;
+using f1_backend.Services; // Yeni servisin dizini
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,27 +10,35 @@ var settings = new ElasticsearchClientSettings(new Uri(elasticUrl)).DefaultIndex
 var elasticClient = new ElasticsearchClient(settings);
 builder.Services.AddSingleton(elasticClient);
 
-// Add services to the container.
+// HttpClient ve yazdýðýmýz F1DataService'i sisteme kaydediyoruz (Dependency Injection)
+builder.Services.AddHttpClient();
+builder.Services.AddTransient<F1DataService>();
+
+// Hangfire Kurulumu
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseInMemoryStorage());
+
+builder.Services.AddHangfireServer();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
         policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
-            .AllowAnyHeader() 
+            .AllowAnyHeader()
             .AllowAnyMethod();
     });
-
 });
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -36,12 +46,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors("AllowReactApp");
-
 app.UseAuthorization();
-
 app.MapControllers();
 
-app.Run();
+// Hangfire Dashboard'u açar
+app.UseHangfireDashboard();
 
+// BackgroundJob kullanarak o yazdýðýmýz metodu bir kereliðine hemen tetikliyoruz.
+BackgroundJob.Enqueue<F1DataService>(service => service.ScheduleNextRaceJob());
+
+app.Run();

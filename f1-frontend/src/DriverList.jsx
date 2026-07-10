@@ -1,21 +1,13 @@
-import React from "react";
-import DriverCard from "./DriverCard";
+import DriverCard from './DriverCard';
 
-function DriverList({drivers, onDelete, onEdit}){
-
-    return(
-        <div className="driver-list">
-            {drivers.map(driver =>(
-                <DriverCard
-                    key={driver.id}
-                    driver={driver}
-                    onDelete={onDelete}
-                    onEdit={onEdit}
-                />
-            ))}
-            
-        </div>
-    )
+function DriverList({ drivers }) {
+  return (
+    <div className="driver-list">
+      {drivers.map((driver, index) => (
+        <DriverCard key={driver.id} driver={driver} rank={index} />
+      ))}
+    </div>
+  );
 }
 
-export default DriverList
+export default DriverList;

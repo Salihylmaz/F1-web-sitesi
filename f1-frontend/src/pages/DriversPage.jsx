@@ -1,150 +1,67 @@
 import '../App.css'; 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import DriverCard from '../DriverCard';
-import DriverForm from '../DriverForm';
 import DriverList from '../DriverList';
 import SearchBar from '../SearchBar';
 
 function DriversPage() {
-
-  const [drivers, setDrivers] = useState([])
-  const [editingDriver, setEditingDriver] = useState(null)
-
-  const [searchQuery, setSearchQuery] = useState('')
+  const [drivers, setDrivers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(''); 
 
-  /*
-  const filteredDrivers = drivers.filter(driver => {
-    if(searchQuery == "") return true;
-
-    const query = searchQuery.toLowerCase();
-    const driverName = driver.name.toLowerCase();
-    const driverTeam = driver.team.toLowerCase();
-
-    return driverName.includes(query) || driverTeam.includes(query);
-  });
-  */
-
-  useEffect(() =>{
+  // --- DEBOUNCE MOTORU ---
+  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  // --- ELASTICSEARCH ZEKİ ARAMA VE VERİ ÇEKME ---
   useEffect(() => {
-  // Eğer kullanıcı bir şey arıyorsa C# Search API'ına git
-  if (debouncedSearch) {
-    axios.get(`https://localhost:7231/api/Drivers/search?searchTerm=${debouncedSearch}`)
-      .then(response => {
-        setDrivers(response.data);
-      })
-      .catch(error => console.error("Arama hatası:", error));
-  } 
-  // Arama kutusu tamamen temizlendiyse normal listeyi getir
-  else {
-    fetchDrivers();
-  }
+    if (debouncedSearch) {
+      axios.get(`https://localhost:7231/api/Drivers/search?searchTerm=${debouncedSearch}`)
+        .then(response => {
+          setDrivers(response.data);
+        })
+        .catch(error => console.error("Arama hatası:", error));
+    } else {
+      fetchDrivers();
+    }
   }, [debouncedSearch]);
-
-  useEffect(() => {
-    fetchDrivers()
-  }, [])
 
   const fetchDrivers = () => {
     axios.get('https://localhost:7231/api/Drivers')
     .then(response => {
+      console.log("BACKEND'DEN GELEN SAF VERİ:", response.data); 
       if (Array.isArray(response.data)){
-        setDrivers(response.data)
+        setDrivers(response.data);
       }
     })
-    .catch(error => console.error('Veri çekme hatası: ', error))
+    .catch(error => console.error('Veri çekme hatası: ', error));
   }
 
-  const handleFormSubmit = (formData) => {
-
-    if(editingDriver != null){
-
-      const updatedDriver = {
-        id: editingDriver.id,
-        name: formData.name,
-        team: formData.team,
-        points: formData.points
-      }
-
-      axios.put(`https://localhost:7231/api/Drivers/${editingDriver.id}`, updatedDriver)
-      .then(response =>{
-        fetchDrivers()
-        setEditingDriver(null)
-      })
-    }
-    else{
-      const newDriver = {
-        id: Math.floor(Math.random() * 10000),
-        name: formData.name,
-        team: formData.team,
-        points: formData.points
-      }
-
-      axios.post('https://localhost:7231/api/Drivers', newDriver)
-      .then(response => {
-        console.log('Sunucu cevabı: ', response.data)
-        //fetchDrivers()
-        setDrivers([...drivers, newDriver])
-      })
-      .catch(error => console.error("Sürücü eklenirken hata:",error))
-    }
-  }
-  const handleEditClick = (driver) => {
-    setEditingDriver(driver)
-  }
-
-  // --- 5. VERİ SİLME (DELETE) ALANI ---
-  const handleDeleteDriver = (id) => {
-    const isConfirmed = window.confirm("Bu pilotu garajdan silmek istediğine emin misin?");
-    
-    if (isConfirmed) {
-      // C# backend'ine DELETE isteği atıyoruz
-      axios.delete(`https://localhost:7231/api/Drivers/${id}`)
-        .then(response => {
-          console.log("Silme başarılı:", response.data);
-          
-          // NRT Mantığı: API'dan listeyi baştan çekmek yerine, 
-          // silinen pilotun ID'sini mevcut state'ten filtreleyip çıkarıyoruz.
-          setDrivers(drivers.filter(driver => driver.id !== id));
-        })
-        .catch(error => console.error("Sürücü silinirken hata:", error));
-    }
-  }
-
-return (
+  return (
     <div className="app-container">
-      <h1>F1 Pit Duvarı</h1>
-      
-      {/* YENİ PİLOT EKLEME FORMU */}
-      <DriverForm 
-        onSubmitForm={handleFormSubmit}
-        editingDriver={editingDriver}
-      />
+      <div className="page-header">
+        <h1>F1 Pit Duvarı</h1>
+        <p className="live-data-badge">🔴 Canlı Veri (Ergast & Elasticsearch)</p>
+      </div>
 
+      {/* Artık DriverForm yok, tamamen sildik! */}
       <hr />
 
       <SearchBar 
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-
       />
 
-      {/* PİLOT LİSTESİ */}
+      {/* PİLOT LİSTESİ - Artık silme ve düzenleme yetkisi yok */}
       <DriverList
-        drivers={drivers} //filteredDrivers'dı eskiden react ile önden aradığımda
-        onDelete={handleDeleteDriver}
-        onEdit={handleEditClick}
-      />
+       drivers={[...drivers].sort((a, b) => b.points - a.points)}
+       />
     </div>
-  )
+  );
 }
 
-export default DriversPage
+export default DriversPage;

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
 html, body {
   margin: 0;
   padding: 0;
@@ -85,19 +87,87 @@ hr {
 /* 4. KARTIN TEMEL (BASE) HALİ */
 .driver-card {
   background-color: #2b2d42;
-  padding: 20px;
-  border-radius: 8px; 
-  width: 250px; 
-  
-  border-left: 5px solid #ef233c; 
-  
-  box-shadow: 0 4px 6px rgba(0,0,0, 0.3);
-  transition: all 0.3s ease; 
+  border-radius: 8px;
+  padding: 15px 25px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 8px solid var(--team-color); 
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 20px; 
 }
 
 .driver-card:hover {
-  transform: translateY(-5px); 
-  box-shadow: 0 8px 15px rgba(0,0,0, 0.5); 
+  transform: translateX(10px); /* Üzerine gelince sağa doğru şık bir kayma */
+  box-shadow: -5px 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+.driver-info {
+  flex: 1; /* Boş alanı doldurarak puanları en sağa iter */
+  min-width: 0; /* Uzun metinlerin Flexbox'ı bozup dışarı taşmasını engeller */
+}
+
+/* Pilot İsmi: Sığmazsa akıllıca kesip (...) koyar */
+.driver-info h2 {
+  margin: 0 0 8px 0;
+  color: #ffffff;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap; /* İsmi zorla tek satırda tutar */
+  overflow: hidden; /* Taşan kısmı gizler */
+  text-overflow: ellipsis; /* Taşan kısmın sonuna 3 nokta koyar (Örn: Kevin Magnus...) */
+}
+
+.team-badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Sağ Kısım: Dijital Puan Ekranı */
+.driver-points {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.points-number {
+  font-family: 'Orbitron', sans-serif; /* Telemetri Fontu */
+  font-size: 2.2rem;
+  color: var(--team-color); /* Puanın rengi de takım renginde parlayacak */
+  line-height: 1;
+}
+
+.points-label {
+  font-size: 0.7rem;
+  color: #8d99ae;
+  letter-spacing: 3px;
+  margin-top: 5px;
+}
+
+/* --- PODYUM VURGULARI --- */
+.podium-1 {
+  border-top: 1px solid #FFD700;
+  border-right: 1px solid #FFD700;
+  border-bottom: 1px solid #FFD700;
+  background: linear-gradient(90deg, #2b2d42 80%, rgba(255, 215, 0, 0.1) 100%);
+}
+
+.podium-2 {
+  border-top: 1px solid #C0C0C0;
+  border-right: 1px solid #C0C0C0;
+  border-bottom: 1px solid #C0C0C0;
+}
+
+.podium-3 {
+  border-top: 1px solid #CD7F32;
+  border-right: 1px solid #CD7F32;
+  border-bottom: 1px solid #CD7F32;
 }
 
 /* 5. BUTONLAR */
