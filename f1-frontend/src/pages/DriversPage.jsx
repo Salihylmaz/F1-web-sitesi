@@ -1,8 +1,8 @@
-import '../App.css'; 
+import "../assets/App.css";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import DriverList from '../DriverList';
-import SearchBar from '../SearchBar';
+import DriverList from '../components/DriverList';
+import SearchBar from '../components/SearchBar';
 
 function DriversPage() {
   const [drivers, setDrivers] = useState([]);

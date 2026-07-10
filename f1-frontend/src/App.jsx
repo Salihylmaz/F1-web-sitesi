@@ -1,9 +1,10 @@
-import './App.css';
+import "./assets/App.css";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Sidebar from './Sidebar';
+import Sidebar from './components/layout/Sidebar';
 import DriversPage from './pages/DriversPage';
-import CalendarPage from './pages/CalendarPage'; // Yeni sayfamız
+import CalendarPage from './pages/CalendarPage';
 import NewsPage from './pages/NewsPage';
+import TelemetryPage from './pages/TelemetryPage'; // <-- Telemetri import edildi
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
           <Routes>
             <Route path="/" element={<DriversPage />} />
             <Route path="/calendar" element={<CalendarPage />} />
-            <Route path='/news' element={<NewsPage/>} />
+            <Route path="/news" element={<NewsPage/>} />
+            <Route path="/telemetry" element={<TelemetryPage />} /> {/* <-- Telemetri rotası eklendi */}
           </Routes>
         </div>
 

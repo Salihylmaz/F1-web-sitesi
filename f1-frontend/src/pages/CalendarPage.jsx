@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../App.css'; 
+import "../assets/App.css";
 
 function CalendarPage() {
   const [races, setRaces] = useState([]);
