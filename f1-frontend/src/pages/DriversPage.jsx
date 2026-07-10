@@ -12,8 +12,9 @@ function DriversPage() {
   const [editingDriver, setEditingDriver] = useState(null)
 
   const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState(''); 
 
-
+  /*
   const filteredDrivers = drivers.filter(driver => {
     if(searchQuery == "") return true;
 
@@ -23,7 +24,30 @@ function DriversPage() {
 
     return driverName.includes(query) || driverTeam.includes(query);
   });
+  */
 
+  useEffect(() =>{
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  useEffect(() => {
+  // Eğer kullanıcı bir şey arıyorsa C# Search API'ına git
+  if (debouncedSearch) {
+    axios.get(`https://localhost:7231/api/Drivers/search?searchTerm=${debouncedSearch}`)
+      .then(response => {
+        setDrivers(response.data);
+      })
+      .catch(error => console.error("Arama hatası:", error));
+  } 
+  // Arama kutusu tamamen temizlendiyse normal listeyi getir
+  else {
+    fetchDrivers();
+  }
+  }, [debouncedSearch]);
 
   useEffect(() => {
     fetchDrivers()
@@ -115,7 +139,7 @@ return (
 
       {/* PİLOT LİSTESİ */}
       <DriverList
-        drivers={filteredDrivers}
+        drivers={drivers} //filteredDrivers'dı eskiden react ile önden aradığımda
         onDelete={handleDeleteDriver}
         onEdit={handleEditClick}
       />

@@ -224,3 +224,169 @@ button {
   color: #a0a5b5;
   font-style: italic;
 }
+
+/* --- CANLI YARIŞ TAKVİMİ MODÜLÜ --- */
+
+.calendar-container {
+  padding: 30px;
+  color: #ffffff;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.calendar-title {
+  margin-bottom: 30px;
+  border-bottom: 2px solid #ef233c; /* F1 Kırmızısı */
+  display: inline-block;
+  padding-bottom: 10px;
+  font-size: 28px;
+  letter-spacing: 1px;
+}
+
+.loading-text {
+  font-style: italic;
+  color: #a0a5b5;
+  font-size: 16px;
+}
+
+.races-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Kartlar arası boşluk */
+}
+
+/* Yarış Kartı - Flexbox Mimarisi */
+.race-card {
+  background-color: #2b2d42;
+  padding: 20px 25px;
+  border-radius: 8px;
+  border-left: 5px solid #0077b6; /* Teknik bir mavi vurgu */
+  display: flex;
+  justify-content: space-between; /* Sağa ve sola yasla */
+  align-items: center; /* Dikeyde ortala */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Üzerine gelince oluşan hover efekti */
+.race-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Sol Taraf: Pist Bilgileri */
+.race-info h3 {
+  margin: 0 0 8px 0;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.race-info p {
+  margin: 0;
+  color: #a0a5b5;
+  font-size: 14px;
+}
+
+/* Sağ Taraf: Tarih ve Saat */
+.race-time {
+  text-align: right;
+}
+
+.race-time .date {
+  font-weight: bold;
+  font-size: 16px;
+  color: #ef233c;
+  margin-bottom: 5px;
+}
+
+.race-time .time {
+  color: #a0a5b5;
+  font-size: 14px;
+}
+
+/* --- HABERLER MODÜLÜ --- */
+
+.news-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Izgara (Grid) Mimarisi: Ekran küçüldükçe kart sayısını otomatik ayarlar */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px; /* Kartlar arası boşluk */
+  margin-top: 20px;
+}
+
+/* Haber Kartı Tasarımı */
+.news-card {
+  background-color: #2b2d42;
+  border-radius: 10px;
+  overflow: hidden; /* Resimlerin köşelerden taşmasını engeller */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-bottom: 4px solid #ef233c; /* F1 Kırmızısı Vurgu */
+}
+
+.news-card, 
+.news-card:visited, 
+.news-card:active, 
+.news-card:focus {
+  text-decoration: none !important; /* Alt çizgiyi zorla yok et */
+  color: inherit !important; /* Tarayıcının yazıları mavi/kırmızı yapmasını kesin olarak engelle */
+  outline: none; /* Tıklanma anındaki dış çerçeveyi kaldır */
+}
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* BÜYÜK RESİMLERİ TERBİYE EDEN KOD */
+.news-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* Resmi ezmeden/sündürmeden kırparak alana oturtur */
+}
+
+/* Haber Başlığı */
+.news-card h1 {
+  color: #ffffff;
+  font-size: 18px;
+  margin: 15px 15px 5px 15px;
+  line-height: 1.4;
+}
+
+/* Yayın Tarihi - Daha aydınlık ve okunabilir bir gümüş tonu */
+.news-card p {
+  color: #b8bedd !important; /* !important ile siyah yapan eski kodu eziyoruz */
+  font-size: 13px;
+  margin: 0 15px 15px 15px;
+  font-style: italic;
+}
+
+/* "Haberi Oku" Butonu - Kırmızı çerçeve, BEYAZ metin */
+.news-card a {
+  margin: auto 15px 15px 15px;
+  padding: 10px 15px;
+  background-color: transparent;
+  color: #ffffff; /* Yazı artık beyaz, karanlık temada cam gibi okunur */
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  border: 1px solid #ef233c; /* F1 kırmızısı sadece çerçevede kaldı */
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+}
+
+/* Hover efekti aynı asilliğiyle kalıyor */
+.news-card a:hover {
+  background-color: #ef233c;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(239, 35, 60, 0.5);
+  transform: scale(1.02);
+}

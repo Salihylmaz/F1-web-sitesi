@@ -9,6 +9,7 @@ function Sidebar() {
         {/* Sayfa yönlendirmeleri */}
         <Link to="/" className="nav-link">🏎️ Pilotlar</Link>
         <Link to="/calendar" className="nav-link">📅 Yarış Takvimi</Link>
+        <Link to="/news" className='nav-link'>Haberler</Link>
       </nav>
     </div>
   );

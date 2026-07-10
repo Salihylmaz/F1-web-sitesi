@@ -1,4 +1,5 @@
 ﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
 using f1_backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,34 @@ namespace f1_backend.Controllers
 
             return Ok(response.Documents);
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Driver>>> SearchDrivers([FromQuery] string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return Ok(new List<Driver>());
+            }
+
+            var searchResponse = await _elasticClient.SearchAsync<Driver>(s => s
+                .Query(q => q
+                    .MultiMatch(m => m
+                        .Fields(new[] { "name", "team" })
+                        .Query(searchTerm)
+                        // Arama tipini "PhrasePrefix" yaparak eksik yazılan kelimelerin sonunu tamamlamasını sağlıyoruz.
+                        .Type(TextQueryType.PhrasePrefix)
+                    )
+                )
+            );
+
+            if (!searchResponse.IsValidResponse)
+            {
+                return StatusCode(500, "Arama motoru servisinde bir problem oluştu.");
+            }
+
+            return Ok(searchResponse.Documents);
+        }
+
         //post atıyorum burada da
         [HttpPost]
         public async Task<ActionResult> AddDriver([FromBody] Driver newDriver)
