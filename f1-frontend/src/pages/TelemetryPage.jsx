@@ -44,7 +44,7 @@ function TelemetryPage() {
 
   useEffect(() => {
     // Elasticsearch'ten tüm pilotları çekiyoruz
-    axios.get('https://localhost:7231/api/Drivers')
+    axios.get(`${import.meta.env.VITE_API_URL}/api/Drivers`)
       .then(response => {
         if (Array.isArray(response.data)) {
           // Gelen veriyi grafik motoru (Recharts) için hazırlıyoruz

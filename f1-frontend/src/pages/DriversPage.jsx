@@ -20,7 +20,7 @@ function DriversPage() {
   // --- ELASTICSEARCH ZEKİ ARAMA VE VERİ ÇEKME ---
   useEffect(() => {
     if (debouncedSearch) {
-      axios.get(`https://localhost:7231/api/Drivers/search?searchTerm=${debouncedSearch}`)
+      axios.get(`${import.meta.env.VITE_API_URL}/api/Drivers/search?searchTerm=${debouncedSearch}`)
         .then(response => {
           setDrivers(response.data);
         })
@@ -31,7 +31,7 @@ function DriversPage() {
   }, [debouncedSearch]);
 
   const fetchDrivers = () => {
-    axios.get('https://localhost:7231/api/Drivers')
+    axios.get(`${import.meta.env.VITE_API_URL}/api/Drivers`)
     .then(response => {
       console.log("BACKEND'DEN GELEN SAF VERİ:", response.data); 
       if (Array.isArray(response.data)){
