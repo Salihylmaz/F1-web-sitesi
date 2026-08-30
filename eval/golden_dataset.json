@@ -1,0 +1,48 @@
+[
+  {
+    "id": "eval_001",
+    "query": "Who is leading the 2024 F1 championship?",
+    "expected_keywords": ["Max Verstappen", "Red Bull", "points"],
+    "expected_facts": {
+      "leader": "Max Verstappen",
+      "team": "Red Bull Racing"
+    },
+    "min_score": 0.7
+  },
+  {
+    "id": "eval_002",
+    "query": "How many races has Lewis Hamilton won in 2024?",
+    "expected_keywords": ["Lewis Hamilton", "Mercedes", "wins"],
+    "expected_facts": {
+      "driver": "Lewis Hamilton",
+      "team": "Mercedes"
+    },
+    "min_score": 0.6
+  },
+  {
+    "id": "eval_003",
+    "query": "Summarize the top 5 drivers standings",
+    "expected_keywords": ["Verstappen", "standings", "points", "team"],
+    "must_contain_count": 3,
+    "min_score": 0.65
+  },
+  {
+    "id": "eval_004",
+    "query": "Which constructor is leading the F1 2024 season?",
+    "expected_keywords": ["Red Bull", "constructor", "championship"],
+    "expected_facts": {
+      "leader_team": "Red Bull Racing"
+    },
+    "min_score": 0.7
+  },
+  {
+    "id": "eval_005",
+    "query": "Tell me about Charles Leclerc's performance",
+    "expected_keywords": ["Leclerc", "Ferrari", "points"],
+    "expected_facts": {
+      "driver": "Charles Leclerc",
+      "team": "Ferrari"
+    },
+    "min_score": 0.6
+  }
+]
